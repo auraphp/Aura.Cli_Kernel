@@ -10,8 +10,12 @@
  */
 namespace Aura\Cli_Kernel;
 
+use Aura\Cli\Context;
 use Aura\Cli\Status;
+use Aura\Cli\Stdio;
+use Aura\Dispatcher\Dispatcher;
 use Exception;
+use Monolog\Logger;
 
 /**
  * 
@@ -23,14 +27,17 @@ use Exception;
 class CliKernel
 {
     public function __construct(
-        $context,
-        $stdio,
-        $dispatcher
+        Context $context,
+        Stdio $stdio,
+        Dispatcher $dispatcher,
+        Logger $logger
     ) {
         $this->context = $context;
         $this->stdio = $stdio;
         $this->dispatcher = $dispatcher;
+        $this->logger = $logger;
     }
+    
     /**
      * 
      * Invokes the kernel (i.e., runs it).
@@ -44,19 +51,22 @@ class CliKernel
         $params = $this->context->argv->get();
         
         // strip the console script name
-        array_shift($params);
+        $script = array_shift($params);
+        $this->logger->debug(__METHOD__ . " script: $script");
         
         // strip the command name, and replace as a named param
         $command = array_shift($params);
         
         // is there a command name specified?
         if (! $command) {
+            $this->logger->error(__METHOD__ . ' no command specified');
             $this->stdio->errln('No command specified.');
             return Status::USAGE;
         }
         
         // does the command exist?
         if (! $this->dispatcher->hasObject($command)) {
+            $this->logger->error(__METHOD__ . " command '{$command}' not recognized");
             $this->stdio->errln("Command '{$command}' not recognized.");
             return Status::UNAVAILABLE;
         }
@@ -67,9 +77,12 @@ class CliKernel
         
         // dispatch to the command
         try {
+            $this->logger->debug(__METHOD__ . " command: $command", $params);
             $result = $this->dispatcher->__invoke($params);
             return (int) $result;
         } catch (Exception $e) {
+            $message = $e->getMessage();
+            $this->logger->error(__METHOD__ . " failure: $message");
             $this->stdio->errln($e->getMessage());
             return Status::FAILURE;
         }
