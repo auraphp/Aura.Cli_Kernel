@@ -11,29 +11,14 @@
  */
 namespace Aura\Cli_Kernel;
 
-use Aura\Project_Kernel\ProjectKernelFactory;
-
-// the project base directory, relative to
-// {$project}/vendor/aura/cli_kernel/scripts/kernel.php
+// get the project kernel
 $base = dirname(dirname(dirname(dirname(__DIR__))));
+$project_kernel = require "{$base}/vendor/aura/project-kernel/scripts/kernel.php";
 
-// the project config mode
-$file = str_replace("/", DIRECTORY_SEPARATOR, "{$base}/config/_mode");
-$mode = trim(file_get_contents($file));
-if (! $mode) {
-    $mode = "default";
-}
-
-// composer autoloader, add project src/ directory
-$loader = require "{$base}/vendor/autoload.php";
-$loader->add('', "{$base}/src");
-
-// project config
-$project_kernel_factory = new ProjectKernelFactory;
-$project_kernel = $project_kernel_factory->newInstance($base, $mode, $loader);
+// invoke it to get the DI container
 $di = $project_kernel->__invoke();
 
 // run the cli kernel and exit with its returned status code
-$cli_kernel = $di->get('cli_kernel');
+$cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
 $status = $cli_kernel->__invoke();
 exit($status);
