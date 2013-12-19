@@ -27,7 +27,8 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->exec(array('aura-integration-hello'));
         $expect = 'Hello World!';
-        $this->assertStdout($expect);
+        $this->assertStdout('Hello World!' . PHP_EOL);
+        $this->assertStderr('');
     }
     
     protected function assertStdout($expect)
@@ -35,6 +36,14 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $stdout = $this->cli_kernel->stdio->getStdout();
         $stdout->rewind();
         $actual = $stdout->fread(strlen($expect));
-        $this->assertSame($expect, $actual);
+        $this->assertEquals($expect, $actual);
+    }
+    
+    protected function assertStderr($expect)
+    {
+        $stderr = $this->cli_kernel->stdio->getStderr();
+        $stderr->rewind();
+        $actual = $stderr->fread(strlen($expect));
+        $this->assertEquals($expect, $actual);
     }
 }
