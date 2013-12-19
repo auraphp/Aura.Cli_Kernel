@@ -11,7 +11,8 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $_ENV['AURA_CONFIG_MODE'] = 'integration';
         
         // add the arguments after a faked initial script name
-        $_SERVER['argv'] = array_merge('cli/console.php', $argv);
+        array_unshift($argv, 'cli/console.php');
+        $_SERVER['argv'] = $argv;
         
         // run the kernel
         require dirname(dirname(__DIR__)) . '/scripts/kernel.php';
