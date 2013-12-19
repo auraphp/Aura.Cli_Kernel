@@ -38,6 +38,11 @@ class CliKernel
         $this->logger = $logger;
     }
     
+    public function __get($key)
+    {
+        return $this->$key;
+    }
+    
     /**
      * 
      * Invokes the kernel (i.e., runs it).
