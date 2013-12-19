@@ -18,7 +18,6 @@ $project_kernel = require "{$base}/vendor/aura/project-kernel/scripts/kernel.php
 // invoke it to get the DI container
 $di = $project_kernel->__invoke();
 
-// run the cli kernel and exit with its returned status code
+// run the cli kernel and return its exit status code
 $cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
-$status = $cli_kernel->__invoke();
-exit($status);
+return $cli_kernel->__invoke();

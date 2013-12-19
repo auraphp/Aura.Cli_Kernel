@@ -5,6 +5,8 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
     protected $cli_kernel;
     
+    protected $status;
+    
     protected function exec(array $argv = array())
     {
         // force into integration mode
@@ -15,7 +17,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $_SERVER['argv'] = $argv;
         
         // run the kernel
-        require dirname(dirname(__DIR__)) . '/scripts/kernel.php';
+        $this->status = require dirname(dirname(__DIR__)) . '/scripts/kernel.php';
         
         // retain from the kernel script
         $this->cli_kernel = $cli_kernel;
