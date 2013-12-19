@@ -27,7 +27,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->exec(array('aura-integration-hello'));
         $expect = 'Hello World!';
-        $this->assertStdout($expect, $actual);
+        $this->assertStdout($expect);
     }
     
     protected function assertStdout($expect)
