@@ -31,6 +31,27 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $this->assertStderr('');
     }
     
+    public function testNoCommandSpecified()
+    {
+        $this->exec();
+        $this->assertStdout('');
+        $this->assertStderr('No command specified.' . PHP_EOL);
+    }
+    
+    public function testCommandNotRecognized()
+    {
+        $this->exec(array('aura-integration-no-such-command'));
+        $this->assertStdout('');
+        $this->assertStderr("Command 'aura-integration-no-such-command' not recognized." . PHP_EOL);
+    }
+    
+    public function testException()
+    {
+        $this->exec(array('aura-integration-exception'));
+        $this->assertStdout('');
+        $this->assertStderr('mock exception' . PHP_EOL);
+    }
+    
     protected function assertStdout($expect)
     {
         $stdout = $this->cli_kernel->stdio->getStdout();

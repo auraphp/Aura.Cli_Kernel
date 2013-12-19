@@ -26,6 +26,14 @@ use Monolog\Logger;
  */
 class CliKernel
 {
+    protected $context;
+    
+    protected $stdio;
+    
+    protected $dispatcher;
+    
+    protected $logger;
+    
     public function __construct(
         Context $context,
         Stdio $stdio,
