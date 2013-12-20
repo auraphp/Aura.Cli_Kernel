@@ -12,7 +12,7 @@ Please see the [Aura.Cli_Project][] repository for more information.
 
 ## Tests
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Cli_Kernel.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Autoload)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Cli_Kernel.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli_Kernel)
 
 This kernel has 100% code coverage with [PHPUnit][].
 
