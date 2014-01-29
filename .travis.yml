@@ -3,4 +3,4 @@ php:
   - 5.4
   - 5.5
   - hhvm
-script: php scripts/integration-test.sh
+script: scripts/integration-test.sh
