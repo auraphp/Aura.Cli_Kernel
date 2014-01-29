@@ -1,4 +1,4 @@
-<phpunit bootstrap="./bootstrap.php" processIsolation="true">
+<phpunit bootstrap="./bootstrap.php" backupGlobals="false" processIsolation="true">
     <testsuites>
         <testsuite>
             <directory>./integration</directory>
