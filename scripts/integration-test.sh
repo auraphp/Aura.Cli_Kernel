@@ -5,9 +5,9 @@ then
     cd ..
 else
     composer create-project aura/cli-project --prefer-dist --stability=dev
-    cd cli-project
-    composer require phpunit/phpunit=3.9.*@dev
-    cd ..
+    # cd cli-project
+    # composer require phpunit/phpunit=3.9.*@dev
+    # cd ..
 fi
 
 rm -rf cli-project/vendor/aura/cli-kernel/*
@@ -19,7 +19,8 @@ cp -r scripts       cli-project/vendor/aura/cli-kernel/
 cp -r src           cli-project/vendor/aura/cli-kernel/
 cp -r tests         cli-project/vendor/aura/cli-kernel/
 cd cli-project/vendor/aura/cli-kernel/tests
-../../../../vendor/bin/phpunit
+# ../../../../vendor/bin/phpunit
+phpunit
 status=$?
 cd ../../../..
 exit $status
