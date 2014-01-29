@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Cli_Kernel;
 
+use Aura\Project_Kernel\ProjectContainer;
+
 class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
     protected $cli_kernel;
@@ -16,11 +18,33 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         array_unshift($argv, 'cli/console.php');
         $_SERVER['argv'] = $argv;
         
-        // run the kernel
-        $this->status = require dirname(dirname(__DIR__)) . '/scripts/kernel.php';
+        // run the console script and retain the kernel
+        $this->cli_kernel = $this->console();
+    }
+    
+    // this should remain an exact copy of cli/console.php,
+    // with the exception that it should not exit()
+    protected function console()
+    {
+        // the project base directory
+        $base = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
+
+        // set up autoloader
+        $loader = require "$base/vendor/autoload.php";
+        $loader->add('', "{$base}/src");
+
+        // load environment modifications
+        require "{$base}/config/_env.php";
+
+        // create the project container
+        $di = ProjectContainer::factory($base, $loader, $_ENV, null);
+
+        // create and invoke a cli kernel
+        $cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
+        $this->status = $cli_kernel();
         
-        // retain from the kernel script
-        $this->cli_kernel = $cli_kernel;
+        // done
+        return $cli_kernel;
     }
     
     public function testHello()
