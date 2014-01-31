@@ -26,24 +26,15 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     // with the exception that it should not exit()
     protected function console()
     {
-        // the project base directory
-        $base = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
-
-        // set up autoloader
-        $loader = require "$base/vendor/autoload.php";
-        $loader->add('', "{$base}/src");
-
-        // load environment modifications
-        require "{$base}/config/_env.php";
-
-        // create the project container
-        $di = ProjectContainer::factory($base, $loader, $_ENV, null);
+        // run the project kernel
+        require dirname(dirname(dirname(dirname(dirname(__DIR__)))))
+              . '/vendor/aura/project-kernel/scripts/kernel.php';
 
         // create and invoke a cli kernel
         $cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
-        $this->status = $cli_kernel();
         
-        // done
+        // retain the status but do not exit
+        $this->status = $cli_kernel();
         return $cli_kernel;
     }
     
