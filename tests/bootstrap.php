@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 
 // look for a composer autoloader relative to
-// {$base}/vendor/aura/web-kernel/tests/bootstrap.php
+// {$base}/vendor/aura/cli-kernel/tests/bootstrap.php
 $base = dirname(dirname(dirname(dirname(__DIR__))));
 $file = "{$base}/vendor/autoload.php";
 if (! is_readable($file)) {
