@@ -1,8 +1,8 @@
 <?php
-namespace Aura\Project_Kernel\Aura\Cli_Kernel\Config;
+namespace Aura\Cli_Kernel\_Config;
 
+use Aura\Di\Config;
 use Aura\Di\Container;
-use Aura\Project_Kernel\Config;
 
 class Integration extends Config
 {
@@ -23,6 +23,9 @@ class Integration extends Config
             )),
             'formatter' => $di->lazyNew('Aura\Cli\Stdio\Formatter'),
         );
+
+        $di->setter['Aura\Cli_Kernel\CliKernel']['setLogger']
+            = $di->lazyNew('Aura\Cli_Kernel\FakeLogger');
     }
 
     public function modify(Container $di)
