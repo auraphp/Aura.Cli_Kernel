@@ -13,21 +13,28 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/project-kernel": "2.*@dev",
+        "aura/project-kernel": "dev-reduced",
         "aura/cli": "2.*@dev",
-        "aura/dispatcher" : "2.*@dev"
+        "aura/dispatcher" : "2.*@dev",
+        "psr/log": "1.*"
     },
     "autoload": {
         "psr-4": {
-            "Aura\\Cli_Kernel\\": "src/"
+            "Aura\\Cli_Kernel\\": "src/",
+            "Aura\\Cli_Kernel\\_Config\\": "config/"
         }
     },
     "extra": {
         "aura": {
-            "type": "kernel"
+            "type": "kernel",
+            "config": {
+                "common": "Aura\\Cli_Kernel\\_Config\\Common",
+                "integration": "Aura\\Cli_Kernel\\_Config\\Integration"
+            }
         },
         "branch-alias": {
             "dev-develop-2": "2.0.x-dev"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
