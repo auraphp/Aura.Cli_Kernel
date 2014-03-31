@@ -15,7 +15,8 @@ use Aura\Cli\Status;
 use Aura\Cli\Stdio;
 use Aura\Dispatcher\Dispatcher;
 use Exception;
-use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * 
@@ -34,11 +35,13 @@ class CliKernel
     
     protected $logger;
     
+    protected $params;
+
     public function __construct(
         Context $context,
         Stdio $stdio,
         Dispatcher $dispatcher,
-        Logger $logger
+        LoggerInterface $logger = null
     ) {
         $this->context = $context;
         $this->stdio = $stdio;
@@ -51,6 +54,11 @@ class CliKernel
         return $this->$key;
     }
     
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * 
      * Invokes the kernel (i.e., runs it).
@@ -60,44 +68,95 @@ class CliKernel
      */
     public function __invoke()
     {
-        // get the params for the dispatcher
-        $params = $this->context->argv->get();
-        
-        // strip the console script name
-        $script = array_shift($params);
-        $this->logger->debug(__METHOD__ . " script: $script");
-        
-        // strip the command name, and replace as a named param
-        $command = array_shift($params);
-        
-        // is there a command name specified?
-        if (! $command) {
-            $this->logger->error(__METHOD__ . ' no command specified');
-            $this->stdio->errln('No command specified.');
+        $exit = $this->setParams();
+        if ($exit) {
+            return $exit;
+        }
+
+        try {
+            $exit = $this->invokeCommand();
+        } catch (Exception $e) {
+            $exit = $this->commandFailed($e);
+        }
+
+        return $exit;
+    }
+
+    protected function setParams()
+    {
+        $this->params = $this->context->argv->get();
+        $this->removeScriptFromParams();
+        $this->setNamedCommandInParams();
+        return $this->getStatus();
+    }
+
+    protected function removeScriptFromParams()
+    {
+        $script = array_shift($this->params);
+        $this->log(LogLevel::DEBUG, __METHOD__ . " script: $script");
+    }
+
+    protected function setNamedCommandInParams()
+    {
+        $this->params['command'] = array_shift($this->params);
+    }
+
+    protected function getStatus()
+    {
+        if (! $this->commandIsSpecified()) {
             return Status::USAGE;
         }
-        
-        // does the command exist?
-        if (! $this->dispatcher->hasObject($command)) {
-            $this->logger->error(__METHOD__ . " command '{$command}' not recognized");
-            $this->stdio->errln("Command '{$command}' not recognized.");
+
+        if (! $this->commandIsAvailable()) {
             return Status::UNAVAILABLE;
         }
         
-        // place the command back as a named param; the rest remain as
-        // sequential params.
-        $params['command'] = $command;
-        
-        // dispatch to the command
-        try {
-            $this->logger->debug(__METHOD__ . " command: $command", $params);
-            $result = $this->dispatcher->__invoke($params);
-            return (int) $result;
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-            $this->logger->error(__METHOD__ . " failure: $message");
-            $this->stdio->errln($e->getMessage());
-            return Status::FAILURE;
+        return 0;
+    }
+
+    protected function commandIsSpecified()
+    {
+        if ($this->params['command']) {
+            return true;
+        }
+
+        $this->log(LogLevel::ERROR, __CLASS__ . ' command not specified');
+        $this->stdio->errln('No command specified.');
+        return false;
+    }
+
+    protected function commandIsAvailable()
+    {
+        $command = $this->params['command'];
+        if ($this->dispatcher->hasObject($command)) {
+            return true;
+        }
+
+        $this->log(LogLevel::ERROR, __CLASS__ . " command '{$command}' not available");
+        $this->stdio->errln("Command '{$command}' not available.");
+        return false;
+    }
+
+    protected function invokeCommand()
+    {
+        $command = $this->params['command'];
+        $this->log(LogLevel::DEBUG, __CLASS__ . " command: $command", $this->params);
+        $exit = $this->dispatcher->__invoke($this->params);
+        return (int) $exit;
+    }
+
+    protected function commandFailed($e)
+    {
+        $message = $e->getMessage();
+        $this->log(LogLevel::ERROR, __CLASS__ . " failure: $message");
+        $this->stdio->errln($e->getMessage());
+        return Status::FAILURE;
+    }
+
+    protected function log($level, $message, $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->log($level, $message, $context);
         }
     }
 }
