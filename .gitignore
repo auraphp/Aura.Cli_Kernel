@@ -1,1 +1,3 @@
-cli-project
+tests/integration/composer.json
+tests/integration/composer.lock
+tests/integration/vendor

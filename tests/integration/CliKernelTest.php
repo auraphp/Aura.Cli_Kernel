@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Cli_Kernel;
 
-use Aura\Project_Kernel\ProjectContainer;
+use Aura\Project_Kernel\Factory;
 
 class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,9 +26,13 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     // with the exception that it should not exit()
     protected function console()
     {
-        // run the project kernel
-        require dirname(dirname(dirname(dirname(dirname(__DIR__)))))
-              . '/vendor/aura/project-kernel/scripts/kernel.php';
+        $path = __DIR__;
+        $di = (new Factory)->newContainer(
+            $path,
+            'integration',
+            "$path/composer.json",
+            "$path/vendor/composer/installed.json"
+        );
 
         // create and invoke a cli kernel
         $cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
@@ -53,11 +57,11 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $this->assertStderr('No command specified.' . PHP_EOL);
     }
     
-    public function testCommandNotRecognized()
+    public function testCommandNotAvailable()
     {
         $this->exec(array('aura-integration-no-such-command'));
         $this->assertStdout('');
-        $this->assertStderr("Command 'aura-integration-no-such-command' not recognized." . PHP_EOL);
+        $this->assertStderr("Command 'aura-integration-no-such-command' not available." . PHP_EOL);
     }
     
     public function testException()
