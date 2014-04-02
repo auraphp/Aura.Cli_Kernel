@@ -16,7 +16,6 @@ use Aura\Cli\Stdio;
 use Aura\Dispatcher\Dispatcher;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 
 /**
  * 
@@ -41,7 +40,7 @@ class CliKernel
         Context $context,
         Stdio $stdio,
         Dispatcher $dispatcher,
-        LoggerInterface $logger = null
+        LoggerInterface $logger
     ) {
         $this->context = $context;
         $this->stdio = $stdio;
@@ -54,11 +53,6 @@ class CliKernel
         return $this->$key;
     }
     
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
     /**
      * 
      * Invokes the kernel (i.e., runs it).
@@ -93,7 +87,7 @@ class CliKernel
     protected function removeScriptFromParams()
     {
         $script = array_shift($this->params);
-        $this->log(LogLevel::DEBUG, __METHOD__ . " script: $script");
+        $this->logger->debug(__METHOD__ . " script: $script");
     }
 
     protected function setNamedCommandInParams()
@@ -120,7 +114,7 @@ class CliKernel
             return true;
         }
 
-        $this->log(LogLevel::ERROR, __CLASS__ . ' command not specified');
+        $this->logger->error(__CLASS__ . ' command not specified');
         $this->stdio->errln('No command specified.');
         return false;
     }
@@ -132,7 +126,7 @@ class CliKernel
             return true;
         }
 
-        $this->log(LogLevel::ERROR, __CLASS__ . " command '{$command}' not available");
+        $this->logger->error(__CLASS__ . " command '{$command}' not available");
         $this->stdio->errln("Command '{$command}' not available.");
         return false;
     }
@@ -140,7 +134,7 @@ class CliKernel
     protected function invokeCommand()
     {
         $command = $this->params['command'];
-        $this->log(LogLevel::DEBUG, __CLASS__ . " command: $command", $this->params);
+        $this->logger->debug(__CLASS__ . " command: $command", $this->params);
         $exit = $this->dispatcher->__invoke($this->params);
         return (int) $exit;
     }
@@ -148,15 +142,8 @@ class CliKernel
     protected function commandFailed($e)
     {
         $message = $e->getMessage();
-        $this->log(LogLevel::ERROR, __CLASS__ . " failure: $message");
+        $this->logger->error(__CLASS__ . " failure: $message");
         $this->stdio->errln($e->getMessage());
         return Status::FAILURE;
-    }
-
-    protected function log($level, $message, $context = array())
-    {
-        if ($this->logger) {
-            $this->logger->log($level, $message, $context);
-        }
     }
 }

@@ -20,7 +20,8 @@ class Common extends Config
         $di->params['Aura\Cli_Kernel\CliKernel'] = array(
             'context' => $di->lazyGet('cli_context'),
             'stdio' => $di->lazyGet('cli_stdio'),
-            'dispatcher' => $di->lazyGet('cli_dispatcher')
+            'dispatcher' => $di->lazyGet('cli_dispatcher'),
+            'logger' => $di->lazyGet('logger'),
         );
     }
 }

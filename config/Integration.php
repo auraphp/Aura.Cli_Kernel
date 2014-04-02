@@ -23,9 +23,6 @@ class Integration extends Config
             )),
             'formatter' => $di->lazyNew('Aura\Cli\Stdio\Formatter'),
         );
-
-        $di->setter['Aura\Cli_Kernel\CliKernel']['setLogger']
-            = $di->lazyNew('Aura\Cli_Kernel\FakeLogger');
     }
 
     public function modify(Container $di)
