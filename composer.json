@@ -29,7 +29,7 @@
             "type": "kernel",
             "config": {
                 "common": "Aura\\Cli_Kernel\\_Config\\Common",
-                "integration": "Aura\\Cli_Kernel\\_Config\\Integration"
+                "kernel": "Aura\\Cli_Kernel\\_Config\\Kernel"
             }
         },
         "branch-alias": {
