@@ -81,7 +81,9 @@ class CliKernel
         $this->params = $this->context->argv->get();
         $this->removeScriptFromParams();
         $this->setNamedCommandInParams();
-        return $this->getStatus();
+        if (! $this->commandIsAvailable()) {
+            return Status::UNAVAILABLE;
+        }
     }
 
     protected function removeScriptFromParams()
@@ -93,30 +95,9 @@ class CliKernel
     protected function setNamedCommandInParams()
     {
         $this->params['command'] = array_shift($this->params);
-    }
-
-    protected function getStatus()
-    {
-        if (! $this->commandIsSpecified()) {
-            return Status::USAGE;
+        if (! $this->params['command']) {
+            $this->params['command'] = 'help';
         }
-
-        if (! $this->commandIsAvailable()) {
-            return Status::UNAVAILABLE;
-        }
-        
-        return 0;
-    }
-
-    protected function commandIsSpecified()
-    {
-        if ($this->params['command']) {
-            return true;
-        }
-
-        $this->logger->error(__CLASS__ . ' command not specified');
-        $this->stdio->errln('No command specified.');
-        return false;
     }
 
     protected function commandIsAvailable()
@@ -125,7 +106,7 @@ class CliKernel
         if ($this->dispatcher->hasObject($command)) {
             return true;
         }
-
+        
         $this->logger->error(__CLASS__ . " command '{$command}' not available");
         $this->stdio->errln("Command '{$command}' not available.");
         return false;
@@ -141,9 +122,10 @@ class CliKernel
 
     protected function commandFailed($e)
     {
+        $class = get_class($e);
         $message = $e->getMessage();
-        $this->logger->error(__CLASS__ . " failure: $message");
-        $this->stdio->errln($e->getMessage());
+        $this->logger->error(__CLASS__ . " failure: $class: $message");
+        $this->stdio->errln("{$class}: " . $e->getMessage());
         return Status::FAILURE;
     }
 }

@@ -43,5 +43,19 @@ class Kernel extends Config
                 throw new \Exception('mock exception');
             }
         );
+
+        $help_service = $di->get('cli_help_service');
+        $help_service->set('aura-integration-hello', function () use ($di) {
+            $help = $di->newInstance('Aura\Cli\Help');
+            $help->setSummary('Integration test command for hello world.');
+            $help->setDescr('The quick brown fox jumps over the lazy dog.');
+            return $help;
+        });
+
+        $help_service->set('aura-integration-exception', function () use ($di) {
+            $help = $di->newInstance('Aura\Cli\Help');
+            $help->setSummary('Throws an exception.');
+            return $help;
+        });
     }
 }

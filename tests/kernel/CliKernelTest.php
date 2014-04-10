@@ -2,6 +2,7 @@
 namespace Aura\Cli_Kernel;
 
 use Aura\Project_Kernel\Factory;
+use Aura\Cli\Status;
 
 class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,31 +31,89 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->console(array('aura-integration-hello'));
         $expect = 'Hello World!';
-        $this->assertStdout('Hello World!' . PHP_EOL);
         $this->assertStderr('');
+        $this->assertStdout('Hello World!' . PHP_EOL);
+        $this->assertStatus(Status::SUCCESS);
     }
     
     public function testNoCommandSpecified()
     {
         $this->console();
-        $this->assertStdout('');
-        $this->assertStderr('No command specified.' . PHP_EOL);
+        $expect = <<<EOT
+aura-integration-exception
+    Throws an exception.
+aura-integration-hello
+    Integration test command for hello world.
+help
+    No summary available.
+
+EOT;
+        $this->assertStderr('');
+        $this->assertStdout($expect);
+        $this->assertStatus(Status::SUCCESS);
     }
     
     public function testCommandNotAvailable()
     {
         $this->console(array('aura-integration-no-such-command'));
-        $this->assertStdout('');
         $this->assertStderr("Command 'aura-integration-no-such-command' not available." . PHP_EOL);
+        $this->assertStdout('');
+        $this->assertStatus(Status::UNAVAILABLE);
     }
     
     public function testException()
     {
         $this->console(array('aura-integration-exception'));
+        $this->assertStderr('Exception: mock exception' . PHP_EOL);
         $this->assertStdout('');
-        $this->assertStderr('mock exception' . PHP_EOL);
+        $this->assertStatus(Status::FAILURE);
+    }
+
+    public function testHelp()
+    {
+        $this->console(array('help'));
+        $expect = <<<EOT
+aura-integration-exception
+    Throws an exception.
+aura-integration-hello
+    Integration test command for hello world.
+help
+    No summary available.
+
+EOT;
+        $this->assertStderr('');
+        $this->assertStdout($expect);
+        $this->assertStatus(Status::SUCCESS);
     }
     
+    public function testHelpCommand()
+    {
+        $this->console(array('help', 'aura-integration-hello'));
+        $expect = <<<EOT
+SUMMARY
+    aura-integration-hello -- Integration test command for hello world.
+
+DESCRIPTION
+    The quick brown fox jumps over the lazy dog.
+
+EOT;
+        $this->assertStderr('');
+        $this->assertStdout($expect);
+        $this->assertStatus(Status::SUCCESS);
+    }
+
+    public function testHelpCommandUnvailable()
+    {
+        $this->console(array('help', 'aura-integration-no-such-command'));
+        $expect = <<<EOT
+Help for command 'aura-integration-no-such-command' not available.
+
+EOT;
+        $this->assertStderr($expect);
+        $this->assertStdout('');
+        $this->assertStatus(Status::UNAVAILABLE);
+    }
+
     protected function assertStdout($expect)
     {
         $stdout = $this->cli_kernel->stdio->getStdout();
@@ -69,5 +128,10 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $stderr->rewind();
         $actual = $stderr->fread(strlen($expect));
         $this->assertEquals($expect, $actual);
+    }
+
+    protected function assertStatus($expect)
+    {
+        $this->assertEquals($expect, $this->status);
     }
 }
