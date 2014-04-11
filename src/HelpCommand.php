@@ -24,20 +24,20 @@ class HelpCommand
         $this->help_service = $help_service;
     }
 
-    public function __invoke($name = null)
+    public function __invoke($command = null)
     {
-        if ($name) {
-            return $this->showCommand($name);
+        if ($command) {
+            return $this->showCommand($command);
         } else {
             return $this->showSummaries();
         }
     }
 
-    protected function showCommand($name)
+    protected function showCommand($command)
     {
-        $help = rtrim($this->help_service->getHelp($name));
+        $help = rtrim($this->help_service->getHelp($command));
         if (! $help) {
-            $this->stdio->errln("Help for command '{$name}' not available.");
+            $this->stdio->errln("Help for command '{$command}' not available.");
             return Status::UNAVAILABLE;
         }
         $this->stdio->outln($help);
@@ -45,14 +45,14 @@ class HelpCommand
 
     protected function showSummaries()
     {
-        $names = array_keys($this->dispatcher->getObjects());
-        sort($names);
-        foreach ($names as $name) {
-            $summ = trim($this->help_service->getSummary($name));
+        $commands = array_keys($this->dispatcher->getObjects());
+        sort($commands);
+        foreach ($commands as $command) {
+            $summ = trim($this->help_service->getSummary($command));
             if (! $summ) {
                 $summ = 'No summary available.';
             }
-            $this->stdio->outln("<<bold>>{$name}<<reset>>");
+            $this->stdio->outln("<<bold>>{$command}<<reset>>");
             $this->stdio->outln("    {$summ}");
         }
     }

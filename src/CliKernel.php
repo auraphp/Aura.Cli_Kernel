@@ -36,6 +36,10 @@ class CliKernel
     
     protected $params;
 
+    protected $script;
+
+    protected $command;
+
     public function __construct(
         Context $context,
         Stdio $stdio,
@@ -62,70 +66,57 @@ class CliKernel
      */
     public function __invoke()
     {
-        $exit = $this->setParams();
-        if ($exit) {
-            return $exit;
+        $this->loadPropertiesFromContext();
+        if ($this->commandIsUnvailable()) {
+            return Status::UNAVAILABLE;
+        } else {
+            return $this->invokeCommand();
         }
-
-        try {
-            $exit = $this->invokeCommand();
-        } catch (Exception $e) {
-            $exit = $this->commandFailed($e);
-        }
-
-        return $exit;
     }
 
-    protected function setParams()
+    protected function loadPropertiesFromContext()
     {
         $this->params = $this->context->argv->get();
-        $this->removeScriptFromParams();
-        $this->setNamedCommandInParams();
-        if (! $this->commandIsAvailable()) {
-            return Status::UNAVAILABLE;
+        $this->script = array_shift($this->params);
+        $this->command = array_shift($this->params);
+        if (! $this->command) {
+            $this->command = 'help';
         }
     }
 
-    protected function removeScriptFromParams()
+    protected function commandIsUnvailable()
     {
-        $script = array_shift($this->params);
-        $this->logger->debug(__METHOD__ . " script: $script");
-    }
-
-    protected function setNamedCommandInParams()
-    {
-        $this->params['command'] = array_shift($this->params);
-        if (! $this->params['command']) {
-            $this->params['command'] = 'help';
-        }
-    }
-
-    protected function commandIsAvailable()
-    {
-        $command = $this->params['command'];
-        if ($this->dispatcher->hasObject($command)) {
-            return true;
+        if ($this->dispatcher->hasObject($this->command)) {
+            return false;
         }
         
-        $this->logger->error(__CLASS__ . " command '{$command}' not available");
-        $this->stdio->errln("Command '{$command}' not available.");
-        return false;
+        $message = "Command '{$this->command}' not available.";
+        $this->logger->error(__CLASS__ . ': ' . $message);
+        $this->stdio->errln($message);
+        return true;
     }
 
     protected function invokeCommand()
     {
-        $command = $this->params['command'];
-        $this->logger->debug(__CLASS__ . " command: $command", $this->params);
-        $exit = $this->dispatcher->__invoke($this->params);
+        $message = __CLASS__ . ": command: {$this->command}";
+        $this->logger->debug($message, $this->params);
+
+        try {
+            $exit = $this->dispatcher->__invoke($this->params, $this->command);
+            $this->logger->debug(__CLASS__ . ": success: {$this->command}");
+        } catch (Exception $e) {
+            $exit = $this->commandFailed($e);
+        }
+
         return (int) $exit;
     }
 
     protected function commandFailed($e)
     {
-        $class = get_class($e);
+        $exception = get_class($e);
         $message = $e->getMessage();
-        $this->logger->error(__CLASS__ . " failure: $class: $message");
-        $this->stdio->errln("{$class}: " . $e->getMessage());
+        $this->logger->error(__CLASS__ . ": failure: {$exception}: {$message}");
+        $this->stdio->errln("{$exception}: {$message}");
         return Status::FAILURE;
     }
 }
