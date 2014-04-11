@@ -42,5 +42,8 @@ class Common extends Config
             'help',
             $di->lazyNew('Aura\Cli_Kernel\HelpCommand')
         );
+
+        $help_service = $di->get('cli_help_service');
+        $help_service->set('help', $di->lazyNew('Aura\Cli_Kernel\HelpHelp'));
     }
 }

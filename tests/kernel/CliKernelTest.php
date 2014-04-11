@@ -47,7 +47,7 @@ aura-integration-hello
 aura-integration-no-help-available
     No summary available.
 help
-    No summary available.
+    Gets the available commands, or the help for one command.
 
 EOT;
         $this->assertStderr('');
@@ -82,7 +82,7 @@ aura-integration-hello
 aura-integration-no-help-available
     No summary available.
 help
-    No summary available.
+    Gets the available commands, or the help for one command.
 
 EOT;
         $this->assertStderr('');
@@ -128,6 +128,26 @@ EOT;
         $this->assertStderr($expect);
         $this->assertStdout('');
         $this->assertStatus(Status::UNAVAILABLE);
+    }
+
+    public function testHelpHelp()
+    {
+        $this->console(array('help', 'help'));
+        $expect = <<<EOT
+SUMMARY
+    help -- Gets the available commands, or the help for one command.
+
+USAGE
+    help 
+    help <command>
+
+DESCRIPTION
+    Issue `help` to get the list of available commands,
+    or `help command` to get help on a specific command.
+
+EOT;
+        $this->assertStderr('');
+        $this->assertStdout($expect);
     }
 
     protected function assertStdout($expect)
