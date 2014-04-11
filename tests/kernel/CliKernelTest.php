@@ -44,6 +44,8 @@ aura-integration-exception
     Throws an exception.
 aura-integration-hello
     Integration test command for hello world.
+aura-integration-no-help-available
+    No summary available.
 help
     No summary available.
 
@@ -77,6 +79,8 @@ aura-integration-exception
     Throws an exception.
 aura-integration-hello
     Integration test command for hello world.
+aura-integration-no-help-available
+    No summary available.
 help
     No summary available.
 
@@ -106,7 +110,19 @@ EOT;
     {
         $this->console(array('help', 'aura-integration-no-such-command'));
         $expect = <<<EOT
-Help for command 'aura-integration-no-such-command' not available.
+Command 'aura-integration-no-such-command' not available.
+
+EOT;
+        $this->assertStderr($expect);
+        $this->assertStdout('');
+        $this->assertStatus(Status::UNAVAILABLE);
+    }
+
+    public function testHelpCommandHelpUnvailable()
+    {
+        $this->console(array('help', 'aura-integration-no-help-available'));
+        $expect = <<<EOT
+Help for command 'aura-integration-no-help-available' not available.
 
 EOT;
         $this->assertStderr($expect);

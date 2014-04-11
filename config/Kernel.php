@@ -44,6 +44,13 @@ class Kernel extends Config
             }
         );
 
+        $dispatcher->setObject(
+            'aura-integration-no-help-available',
+            function () {
+                $stdio->outln("Does nothing.");
+            }
+        );
+
         $help_service = $di->get('cli_help_service');
         $help_service->set('aura-integration-hello', function () use ($di) {
             $help = $di->newInstance('Aura\Cli\Help');

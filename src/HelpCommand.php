@@ -35,11 +35,17 @@ class HelpCommand
 
     protected function showCommand($command)
     {
+        if (! $this->dispatcher->hasObject($command)) {
+            $this->stdio->errln("Command '{$command}' not available.");
+            return Status::UNAVAILABLE;
+        }
+
         $help = rtrim($this->help_service->getHelp($command));
         if (! $help) {
             $this->stdio->errln("Help for command '{$command}' not available.");
             return Status::UNAVAILABLE;
         }
+        
         $this->stdio->outln($help);
     }
 
