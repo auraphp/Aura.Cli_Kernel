@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of Aura for PHP.
+ * 
+ * @package Aura.Cli_Kernel
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Cli_Kernel;
 
 use Aura\Cli\Context;
@@ -6,14 +15,53 @@ use Aura\Cli\Stdio;
 use Aura\Cli\Status;
 use Aura\Dispatcher\Dispatcher;
 
+/**
+ * 
+ * A command to show help output.
+ * 
+ * @package Aura.Cli_Kernel
+ * 
+ */
 class HelpCommand
 {
+    /**
+     * 
+     * A standard I/O object.
+     * 
+     * @var Stdio
+     * 
+     */
     protected $stdio;
 
+    /**
+     * 
+     * The CLI dispatcher.
+     * 
+     * @var Dispatcher
+     * 
+     */
     protected $dispatcher;
 
+    /**
+     * 
+     * The help output generation service.
+     * 
+     * @var HelpService
+     * 
+     */
     protected $help_service;
 
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param Stdio $stdio A standard I/O object.
+     * 
+     * @param Dispatcher $dispatcher THe CLI dispatcher.
+     * 
+     * @param HelpService $help_service The help output generation service.
+     * 
+     */
     public function __construct(
         Stdio $stdio,
         Dispatcher $dispatcher,
@@ -24,6 +72,16 @@ class HelpCommand
         $this->help_service = $help_service;
     }
 
+    /**
+     * 
+     * Invokes the command.
+     * 
+     * @param string $command The command to get help for; if empty, shows the
+     * list of all commands and their summaries.
+     * 
+     * @return int
+     * 
+     */
     public function __invoke($command = null)
     {
         if ($command) {
@@ -33,6 +91,15 @@ class HelpCommand
         }
     }
 
+    /**
+     * 
+     * Shows the help for a command.
+     * 
+     * @param string $command The command to get help for.
+     * 
+     * @return int
+     * 
+     */
     protected function showCommand($command)
     {
         if (! $this->dispatcher->hasObject($command)) {
@@ -49,6 +116,13 @@ class HelpCommand
         $this->stdio->outln($help);
     }
 
+    /**
+     * 
+     * Shows the list of all commands and their summaries.
+     * 
+     * @return int
+     * 
+     */
     protected function showSummaries()
     {
         $commands = array_keys($this->dispatcher->getObjects());

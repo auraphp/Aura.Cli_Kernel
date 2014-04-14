@@ -1,42 +1,111 @@
 <?php
 namespace Aura\Cli_Kernel;
 
+/**
+ * 
+ * A registry service to return help output.
+ * 
+ * @package Aura.Cli_Kernel
+ * 
+ */
 class HelpService
 {
+    /**
+     * 
+     * A registry of help object factories mapped by command names.
+     * 
+     * @var array
+     * 
+     */
     protected $map = array();
 
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param array $map A registry of help object factories mapped by command
+     * names.
+     * 
+     */
     public function __construct(array $map = array())
     {
         $this->map = $map;
     }
 
-    public function set($name, $callable)
+    /**
+     * 
+     * Sets a help object factory into the map by name.
+     * 
+     * @param string $command The help command name.
+     * 
+     * @param callable $callable The callable factory to create the help object.
+     * 
+     * @return null
+     * 
+     */
+    public function set($command, $callable)
     {
-        $this->map[$name] = $callable;
+        $this->map[$command] = $callable;
     }
 
-    public function has($name)
+    /**
+     * 
+     * Is a particular help command registered?
+     * 
+     * @param string $command The help command name.
+     * 
+     * @return bool
+     * 
+     */
+    public function has($command)
     {
-        return isset($this->map[$name]);
+        return isset($this->map[$command]);
     }
 
-    public function get($name)
+    /**
+     * 
+     * Gets a new instance of the help object for a particular command.
+     * 
+     * @param string $command The help command name.
+     * 
+     * @return object
+     * 
+     */
+    public function get($command)
     {
-        $callable = $this->map[$name];
+        $callable = $this->map[$command];
         return $callable();
     }
 
-    public function getHelp($name)
+    /**
+     * 
+     * Gets the full help output for a particular command.
+     * 
+     * @param string $command The help command name.
+     * 
+     * @return string
+     * 
+     */
+    public function getHelp($command)
     {
-        if ($this->has($name)) {
-            return $this->get($name)->getHelp($name);
+        if ($this->has($command)) {
+            return $this->get($command)->getHelp($command);
         }
     }
 
-    public function getSummary($name)
+    /**
+     * 
+     * Gets the help summary output for a particular command.
+     * 
+     * @param string $command The help command name.
+     * 
+     * @return string
+     * 
+     */
+    public function getSummary($command)
     {
-        if ($this->has($name)) {
-            return $this->get($name)->getSummary($name);
+        if ($this->has($command)) {
+            return $this->get($command)->getSummary($command);
         }
     }
 }
