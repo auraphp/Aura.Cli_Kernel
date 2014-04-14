@@ -26,20 +26,82 @@ use Psr\Log\LoggerInterface;
  */
 class CliKernel
 {
+    /**
+     * 
+     * A CLI context object.
+     * 
+     * @var Context
+     * 
+     */
     protected $context;
     
+    /**
+     * 
+     * A standard I/O object.
+     * 
+     * @var Stdio
+     * 
+     */
     protected $stdio;
     
+    /**
+     * 
+     * The CLI dispatcher.
+     * 
+     * @var Dispatcher
+     * 
+     */
     protected $dispatcher;
     
+    /**
+     * 
+     * A PSR-3 logger.
+     * 
+     * @var LoggerInterface
+     * 
+     */
     protected $logger;
     
+    /**
+     * 
+     * Params passed at the command line for the dispatcher.
+     * 
+     * @var array
+     * 
+     */
     protected $params;
 
+    /**
+     * 
+     * The console script invoked at the command line.
+     * 
+     * @var string
+     * 
+     */
     protected $script;
 
+    /**
+     * 
+     * The name of the command to dispatch to.
+     * 
+     * @var string
+     * 
+     */
     protected $command;
 
+    /**
+     * 
+     * Constructor.
+     * 
+     * @param Context $context The CLI context.
+     * 
+     * @param Stdio $stdio A standard I/O object.
+     * 
+     * @param Dispatcher $dispatcher The CLI dispatcher.
+     * 
+     * @param LoggerInterface $logger A PSR-3 logger.
+     * 
+     */
     public function __construct(
         Context $context,
         Stdio $stdio,
@@ -52,6 +114,15 @@ class CliKernel
         $this->logger = $logger;
     }
     
+    /**
+     * 
+     * Magic get for read-only properties.
+     * 
+     * @param string $key The property name.
+     * 
+     * @return mixed The property.
+     * 
+     */
     public function __get($key)
     {
         return $this->$key;
@@ -59,7 +130,7 @@ class CliKernel
     
     /**
      * 
-     * Invokes the kernel (i.e., runs it).
+     * Runs this kernel.
      * 
      * @return int The exit code.
      * 
@@ -74,6 +145,13 @@ class CliKernel
         }
     }
 
+    /**
+     * 
+     * Loads the kernel properties from the CLI context.
+     * 
+     * @return null
+     * 
+     */
     protected function loadPropertiesFromContext()
     {
         $this->params = $this->context->argv->get();
@@ -84,6 +162,13 @@ class CliKernel
         }
     }
 
+    /**
+     * 
+     * Is the command unavailable?
+     * 
+     * @return bool
+     * 
+     */
     protected function commandIsUnvailable()
     {
         if ($this->dispatcher->hasObject($this->command)) {
@@ -96,6 +181,13 @@ class CliKernel
         return true;
     }
 
+    /**
+     * 
+     * Invokes the command via the dispatcher.
+     * 
+     * @return int The command exit code.
+     * 
+     */
     protected function invokeCommand()
     {
         $message = __CLASS__ . ": command: {$this->command}";
@@ -111,6 +203,15 @@ class CliKernel
         return (int) $exit;
     }
 
+    /**
+     * 
+     * The command failed because of an uncaught exception.
+     * 
+     * @param Exception $e The exception thrown by the failed command.
+     * 
+     * @return int
+     * 
+     */
     protected function commandFailed($e)
     {
         $exception = get_class($e);
