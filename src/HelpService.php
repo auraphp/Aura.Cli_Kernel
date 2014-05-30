@@ -1,40 +1,40 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli_Kernel
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli_Kernel;
 
 /**
- * 
+ *
  * A registry service to return help output.
- * 
+ *
  * @package Aura.Cli_Kernel
- * 
+ *
  */
 class HelpService
 {
     /**
-     * 
+     *
      * A registry of help object factories mapped by command names.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $map = array();
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param array $map A registry of help object factories mapped by command
      * names.
-     * 
+     *
      */
     public function __construct(array $map = array())
     {
@@ -42,15 +42,15 @@ class HelpService
     }
 
     /**
-     * 
+     *
      * Sets a help object factory into the map by name.
-     * 
+     *
      * @param string $command The help command name.
-     * 
+     *
      * @param callable $callable The callable factory to create the help object.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     public function set($command, $callable)
     {
@@ -58,13 +58,13 @@ class HelpService
     }
 
     /**
-     * 
+     *
      * Is a particular help command registered?
-     * 
+     *
      * @param string $command The help command name.
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     public function has($command)
     {
@@ -72,13 +72,13 @@ class HelpService
     }
 
     /**
-     * 
+     *
      * Gets a new instance of the help object for a particular command.
-     * 
+     *
      * @param string $command The help command name.
-     * 
+     *
      * @return object
-     * 
+     *
      */
     public function get($command)
     {
@@ -87,13 +87,13 @@ class HelpService
     }
 
     /**
-     * 
+     *
      * Gets the full help output for a particular command.
-     * 
+     *
      * @param string $command The help command name.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getHelp($command)
     {
@@ -103,13 +103,13 @@ class HelpService
     }
 
     /**
-     * 
+     *
      * Gets the help summary output for a particular command.
-     * 
+     *
      * @param string $command The help command name.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getSummary($command)
     {

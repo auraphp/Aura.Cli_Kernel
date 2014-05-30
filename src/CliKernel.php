@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of Aura for PHP.
- * 
+ *
  * @package Aura.Cli_Kernel
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Cli_Kernel;
 
@@ -18,89 +18,89 @@ use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
- * 
+ *
  * A kernel for Aura CLI projects.
- * 
+ *
  * @package Aura.Cli_Kernel
- * 
+ *
  */
 class CliKernel
 {
     /**
-     * 
+     *
      * A CLI context object.
-     * 
+     *
      * @var Context
-     * 
+     *
      */
     protected $context;
-    
+
     /**
-     * 
+     *
      * A standard I/O object.
-     * 
+     *
      * @var Stdio
-     * 
+     *
      */
     protected $stdio;
-    
+
     /**
-     * 
+     *
      * The CLI dispatcher.
-     * 
+     *
      * @var Dispatcher
-     * 
+     *
      */
     protected $dispatcher;
-    
+
     /**
-     * 
+     *
      * A PSR-3 logger.
-     * 
+     *
      * @var LoggerInterface
-     * 
+     *
      */
     protected $logger;
-    
+
     /**
-     * 
+     *
      * Params passed at the command line for the dispatcher.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params;
 
     /**
-     * 
+     *
      * The console script invoked at the command line.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $script;
 
     /**
-     * 
+     *
      * The name of the command to dispatch to.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $command;
 
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param Context $context The CLI context.
-     * 
+     *
      * @param Stdio $stdio A standard I/O object.
-     * 
+     *
      * @param Dispatcher $dispatcher The CLI dispatcher.
-     * 
+     *
      * @param LoggerInterface $logger A PSR-3 logger.
-     * 
+     *
      */
     public function __construct(
         Context $context,
@@ -113,27 +113,27 @@ class CliKernel
         $this->dispatcher = $dispatcher;
         $this->logger = $logger;
     }
-    
+
     /**
-     * 
+     *
      * Magic get for read-only properties.
-     * 
+     *
      * @param string $key The property name.
-     * 
+     *
      * @return mixed The property.
-     * 
+     *
      */
     public function __get($key)
     {
         return $this->$key;
     }
-    
+
     /**
-     * 
+     *
      * Runs this kernel.
-     * 
+     *
      * @return int The exit code.
-     * 
+     *
      */
     public function __invoke()
     {
@@ -146,11 +146,11 @@ class CliKernel
     }
 
     /**
-     * 
+     *
      * Loads the kernel properties from the CLI context.
-     * 
+     *
      * @return null
-     * 
+     *
      */
     protected function loadPropertiesFromContext()
     {
@@ -163,18 +163,18 @@ class CliKernel
     }
 
     /**
-     * 
+     *
      * Is the command unavailable?
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function commandIsUnvailable()
     {
         if ($this->dispatcher->hasObject($this->command)) {
             return false;
         }
-        
+
         $message = "Command '{$this->command}' not available.";
         $this->logger->error(__CLASS__ . ': ' . $message);
         $this->stdio->errln($message);
@@ -182,11 +182,11 @@ class CliKernel
     }
 
     /**
-     * 
+     *
      * Invokes the command via the dispatcher.
-     * 
+     *
      * @return int The command exit code.
-     * 
+     *
      */
     protected function invokeCommand()
     {
@@ -204,13 +204,13 @@ class CliKernel
     }
 
     /**
-     * 
+     *
      * The command failed because of an uncaught exception.
-     * 
+     *
      * @param Exception $e The exception thrown by the failed command.
-     * 
+     *
      * @return int
-     * 
+     *
      */
     protected function commandFailed($e)
     {

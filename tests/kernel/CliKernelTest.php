@@ -7,14 +7,14 @@ use Aura\Cli\Status;
 class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
     protected $cli_kernel;
-    
+
     protected $status;
-    
+
     protected function console(array $argv = array())
     {
         array_unshift($argv, 'cli/console.php');
         $_SERVER['argv'] = $argv;
-        
+
         $path = __DIR__;
         $di = (new Factory)->newContainer(
             $path,
@@ -26,7 +26,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $this->cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
         $this->status = $this->cli_kernel->__invoke();
     }
-    
+
     public function testHello()
     {
         $this->console(array('aura-integration-hello'));
@@ -35,7 +35,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $this->assertStdout('Hello World!' . PHP_EOL);
         $this->assertStatus(Status::SUCCESS);
     }
-    
+
     public function testNoCommandSpecified()
     {
         $this->console();
@@ -54,7 +54,7 @@ EOT;
         $this->assertStdout($expect);
         $this->assertStatus(Status::SUCCESS);
     }
-    
+
     public function testCommandNotAvailable()
     {
         $this->console(array('aura-integration-no-such-command'));
@@ -62,7 +62,7 @@ EOT;
         $this->assertStdout('');
         $this->assertStatus(Status::UNAVAILABLE);
     }
-    
+
     public function testException()
     {
         $this->console(array('aura-integration-exception'));
@@ -89,7 +89,7 @@ EOT;
         $this->assertStdout($expect);
         $this->assertStatus(Status::SUCCESS);
     }
-    
+
     public function testHelpCommand()
     {
         $this->console(array('help', 'aura-integration-hello'));
@@ -138,7 +138,7 @@ SUMMARY
     help -- Gets the available commands, or the help for one command.
 
 USAGE
-    help 
+    help
     help <command>
 
 DESCRIPTION
@@ -157,7 +157,7 @@ EOT;
         $actual = $stdout->fread(strlen($expect));
         $this->assertEquals($expect, $actual);
     }
-    
+
     protected function assertStderr($expect)
     {
         $stderr = $this->cli_kernel->stdio->getStderr();
