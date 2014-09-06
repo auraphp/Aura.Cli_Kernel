@@ -15,7 +15,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         array_unshift($argv, 'cli/console.php');
         $_SERVER['argv'] = $argv;
 
-        $path = __DIR__;
+        $path = dirname(__DIR__);
         $di = (new Factory)->newContainer(
             $path,
             'kernel',
