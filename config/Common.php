@@ -25,7 +25,7 @@ class Common extends Config
             'context' => $di->lazyGet('cli_context'),
             'stdio' => $di->lazyGet('cli_stdio'),
             'dispatcher' => $di->lazyGet('cli_dispatcher'),
-            'logger' => $di->lazyGet('logger'),
+            'logger' => $di->lazyGet('aura/project-kernel:logger'),
         );
 
         $di->params['Aura\Cli_Kernel\HelpCommand'] = array(
