@@ -27,8 +27,8 @@ class Kernel extends Config
 
     public function modify(Container $di)
     {
-        $dispatcher = $di->get('cli_dispatcher');
-        $stdio = $di->get('cli_stdio');
+        $dispatcher = $di->get('aura/cli-kernel:dispatcher');
+        $stdio = $di->get('aura/cli-kernel:stdio');
 
         $dispatcher->setObject(
             'aura-integration-hello',
@@ -51,7 +51,7 @@ class Kernel extends Config
             }
         );
 
-        $help_service = $di->get('cli_help_service');
+        $help_service = $di->get('aura/cli-kernel:help_service');
         $help_service->set('aura-integration-hello', function () use ($di) {
             $help = $di->newInstance('Aura\Cli\Help');
             $help->setSummary('Integration test command for hello world.');
