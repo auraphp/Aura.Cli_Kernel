@@ -52,9 +52,9 @@ To ask questions, provide feedback, or otherwise communicate with the Aura commu
 
 This kernel defines the following service objects in the _Container_:
 
-- `cli_dispatcher`: an instance of _Aura\Dispatcher\Dispatcher_
-- `cli_context`: an instance of _Aura\Cli\Context_
-- `cli_stdio`: an instance of _Aura\Cli\Stdio_
-- `cli_help_service`: an instance of _Aura\Cli_Kernel\HelpService_
+- `aura/cli-kernel:dispatcher`: an instance of _Aura\Dispatcher\Dispatcher_
+- `aura/cli-kernel:context`: an instance of _Aura\Cli\Context_
+- `aura/cli-kernel:stdio`: an instance of _Aura\Cli\Stdio_
+- `aura/cli-kernel:help_service`: an instance of _Aura\Cli_Kernel\HelpService_
 
 Note that service definitions set at the kernel level may be reset at the project level.
