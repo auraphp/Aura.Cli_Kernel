@@ -86,9 +86,9 @@ class HelpCommand
     {
         if ($command) {
             return $this->showCommand($command);
-        } else {
-            return $this->showSummaries();
         }
+
+        return $this->showSummaries();
     }
 
     /**
@@ -114,6 +114,8 @@ class HelpCommand
         }
 
         $this->stdio->outln($help);
+
+        return Status::USAGE;
     }
 
     /**
