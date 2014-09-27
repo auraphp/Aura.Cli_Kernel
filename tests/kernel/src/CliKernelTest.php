@@ -30,9 +30,9 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
     public function testHello()
     {
         $this->console(array('aura-integration-hello'));
-        $expect = 'Hello World!';
+        $expect = 'Hello World!' . PHP_EOL;
         $this->assertStderr('');
-        $this->assertStdout('Hello World!' . PHP_EOL);
+        $this->assertStdout($expect);
         $this->assertStatus(Status::SUCCESS);
     }
 
