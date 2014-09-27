@@ -138,11 +138,12 @@ class CliKernel
     public function __invoke()
     {
         $this->loadPropertiesFromContext();
+
         if ($this->commandIsUnvailable()) {
             return Status::UNAVAILABLE;
-        } else {
-            return $this->invokeCommand();
         }
+
+        return $this->invokeCommand();
     }
 
     /**

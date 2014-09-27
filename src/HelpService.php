@@ -100,6 +100,8 @@ class HelpService
         if ($this->has($command)) {
             return $this->get($command)->getHelp($command);
         }
+
+        return '';
     }
 
     /**
@@ -116,5 +118,7 @@ class HelpService
         if ($this->has($command)) {
             return $this->get($command)->getSummary($command);
         }
+
+        return '';
     }
 }
