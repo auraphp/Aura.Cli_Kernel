@@ -18,7 +18,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $path = dirname(__DIR__);
         $di = (new Factory)->newContainer(
             $path,
-            'kernel',
+            'cli-kernel-test',
             "$path/composer.json",
             "$path/vendor/composer/installed.json"
         );

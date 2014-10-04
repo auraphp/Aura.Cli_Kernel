@@ -31,7 +31,7 @@
             "type": "kernel",
             "config": {
                 "common": "Aura\\Cli_Kernel\\_Config\\Common",
-                "kernel": "Aura\\Cli_Kernel\\_Config\\Kernel"
+                "cli-kernel-test": "Aura\\Cli_Kernel\\_Config\\CliKernelTest"
             }
         },
         "branch-alias": {

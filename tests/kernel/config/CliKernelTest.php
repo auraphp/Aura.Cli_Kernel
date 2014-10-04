@@ -4,7 +4,7 @@ namespace Aura\Cli_Kernel\_Config;
 use Aura\Di\Config;
 use Aura\Di\Container;
 
-class Kernel extends Config
+class CliKernelTest extends Config
 {
     public function define(Container $di)
     {
