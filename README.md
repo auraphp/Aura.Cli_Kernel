@@ -11,7 +11,7 @@ kernel package has userland dependencies, which themselves may have other
 dependencies:
 
 - [aura/project-kernel](https://packagist.org/packages/aura/project-kernel)
-- [aura/cli](https://packagist.org/packages/aura/web)
+- [aura/cli](https://packagist.org/packages/aura/cli)
 - [aura/dispatcher](https://packagist.org/packages/aura/dispatcher)
 - [psr/log](https://packagist.org/packages/psr/log)
 
