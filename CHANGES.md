@@ -1,5 +1,4 @@
-- DOC: Update README and docblocks.
+- DOC: Update README.
 
-- CHG: Use new logger service name.
-
-- BRK: Rename 'cli_*' services to 'aura/cli-kernel:*'
+- TST: Turn off auto-resolution in tests, and make tests mimic project more
+  closely.
