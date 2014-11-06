@@ -1,8 +1,9 @@
 <?php
 namespace Aura\Cli_Kernel;
 
-use Aura\Project_Kernel\Factory;
+use Aura\Di\ContainerBuilder;
 use Aura\Cli\Status;
+use Aura\Project_Kernel\Factory;
 
 class CliKernelTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +21,8 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
             $path,
             'cli-kernel-test',
             "$path/composer.json",
-            "$path/vendor/composer/installed.json"
+            "$path/vendor/composer/installed.json",
+            ContainerBuilder::DISABLE_AUTO_RESOLVE
         );
 
         $this->cli_kernel = $di->newInstance('Aura\Cli_Kernel\CliKernel');
