@@ -218,6 +218,7 @@ class CliKernel
         $exception = get_class($e);
         $message = $e->getMessage();
         $this->logger->error(__CLASS__ . ": failure: {$exception}: {$message}");
+        $this->logger->error($e->getTraceAsString());
         $this->stdio->errln("{$exception}: {$message}");
         return Status::FAILURE;
     }
