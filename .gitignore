@@ -1,5 +1,2 @@
-tests/kernel/composer.json
-tests/kernel/composer.lock
-tests/kernel/vendor
 /composer.lock
 /vendor
