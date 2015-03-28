@@ -1,1 +1,1 @@
-This release modifies the testing structure and updates other support files.
+This release cleans up the .gitignore file.
