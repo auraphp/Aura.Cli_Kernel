@@ -10,7 +10,6 @@
  */
 namespace Aura\Cli_Kernel;
 
-use Aura\Cli\Context;
 use Aura\Cli\Stdio;
 use Aura\Cli\Status;
 use Aura\Dispatcher\Dispatcher;
