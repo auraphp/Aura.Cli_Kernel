@@ -1,4 +1,2 @@
-- DOC: Update README.
+This release modifies the testing structure and updates other support files.
 
-- TST: Turn off auto-resolution in tests, and make tests mimic project more
-  closely.
