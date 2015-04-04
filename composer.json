@@ -33,9 +33,6 @@
                 "common": "Aura\\Cli_Kernel\\_Config\\Common",
                 "cli-kernel-test": "Aura\\Cli_Kernel\\_Config\\CliKernelTest"
             }
-        },
-        "branch-alias": {
-            "dev-develop-2": "2.0.x-dev"
         }
     },
     "autoload-dev": {
