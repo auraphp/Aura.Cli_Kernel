@@ -1,1 +1,1 @@
-This release cleans up the .gitignore file.
+Hygiene release: update the license year, and remove branch alias.
