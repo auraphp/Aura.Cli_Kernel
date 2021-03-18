@@ -5,7 +5,7 @@ use Aura\Di\ContainerBuilder;
 use Aura\Cli\Status;
 use Aura\Project_Kernel\Factory;
 
-class CliKernelTest extends \PHPUnit_Framework_TestCase
+class CliKernelTest extends \PHPUnit\Framework\TestCase
 {
     protected $cli_kernel;
 
@@ -19,7 +19,7 @@ class CliKernelTest extends \PHPUnit_Framework_TestCase
         $this->cli_kernel = (new Factory)->newKernel(
             dirname(__DIR__),
             'Aura\Cli_Kernel\CliKernel',
-            ContainerBuilder::DISABLE_AUTO_RESOLVE
+            false
         );
 
         $this->status = $this->cli_kernel->__invoke();
