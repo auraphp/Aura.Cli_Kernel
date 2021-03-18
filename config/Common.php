@@ -1,12 +1,12 @@
 <?php
 namespace Aura\Cli_Kernel\_Config;
 
-use Aura\Di\Config;
+use Aura\Di\ContainerConfig as Config;
 use Aura\Di\Container;
 
 class Common extends Config
 {
-    public function define(Container $di)
+    public function define(Container $di): void
     {
         $di->set('aura/cli-kernel:context', $di->lazyNew('Aura\Cli\Context'));
         $di->set('aura/cli-kernel:stdio', $di->lazyNew('Aura\Cli\Stdio'));
@@ -35,7 +35,7 @@ class Common extends Config
         );
     }
 
-    public function modify(Container $di)
+    public function modify(Container $di): void
     {
         $dispatcher = $di->get('aura/cli-kernel:dispatcher');
         $dispatcher->setObject(
