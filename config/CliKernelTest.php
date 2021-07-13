@@ -1,12 +1,12 @@
 <?php
 namespace Aura\Cli_Kernel\_Config;
 
-use Aura\Di\Config;
+use Aura\Di\ContainerConfig as Config;
 use Aura\Di\Container;
 
 class CliKernelTest extends Config
 {
-    public function define(Container $di)
+    public function define(Container $di): void
     {
         $di->params['Aura\Cli\Stdio'] = array(
             'stdin' => $di->lazyNew('Aura\Cli\Stdio\Handle', array(
@@ -25,7 +25,7 @@ class CliKernelTest extends Config
         );
     }
 
-    public function modify(Container $di)
+    public function modify(Container $di): void
     {
         $dispatcher = $di->get('aura/cli-kernel:dispatcher');
         $stdio = $di->get('aura/cli-kernel:stdio');
@@ -46,7 +46,7 @@ class CliKernelTest extends Config
 
         $dispatcher->setObject(
             'aura-integration-no-help-available',
-            function () {
+            function () use ($stdio) {
                 $stdio->outln("Does nothing.");
             }
         );
