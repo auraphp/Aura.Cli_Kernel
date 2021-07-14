@@ -40,7 +40,7 @@ class Common extends Config
         $dispatcher = $di->get('aura/cli-kernel:dispatcher');
         $dispatcher->setObject(
             'help',
-            $di->lazyNew('Aura\Cli_Kernel\HelpCommand')
+            $di->newInstance('Aura\Cli_Kernel\HelpCommand')
         );
 
         $help_service = $di->get('aura/cli-kernel:help_service');
