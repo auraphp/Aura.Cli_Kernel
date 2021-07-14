@@ -17,12 +17,9 @@
     "require": {
         "php": ">=7.2.0",
         "aura/project-kernel": "4.x-dev",
-        "aura/cli": "update-for-php7-dev",
+        "aura/cli": "4.x-dev",
         "aura/dispatcher": "~2.0"
     },
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/kenjis/Aura.Cli.git" }
-    ],
     "require-dev": {
         "phpunit/phpunit": "^8.5",
         "aura/di": "^4.0"
