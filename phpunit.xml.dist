@@ -1,10 +1,15 @@
 <phpunit bootstrap="./phpunit.php">
     <testsuites>
-        <testsuite>
+        <testsuite name="all">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <php>
         <env name="AURA_CONFIG_MODE" value="cli-kernel-test" />
     </php>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
 </phpunit>
