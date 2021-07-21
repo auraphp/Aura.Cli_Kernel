@@ -1,7 +1,6 @@
 <?php
 namespace Aura\Cli_Kernel;
 
-use Aura\Di\ContainerBuilder;
 use Aura\Cli\Status;
 use Aura\Project_Kernel\Factory;
 
