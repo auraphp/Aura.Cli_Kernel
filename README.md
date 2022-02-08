@@ -29,7 +29,10 @@ _autoload.php_ file.
 
 ### Tests
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Cli_Kernel.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Cli_Kernel)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Cli_Kernel/badges/quality-score.png?b=4.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Cli_Kernel/)
+[![codecov](https://codecov.io/gh/auraphp/Aura.Cli_Kernel/branch/4.x/graph/badge.svg?token=UASDouLxyc)](https://codecov.io/gh/auraphp/Aura.Cli_Kernel)
+[![Continuous Integration](https://github.com/auraphp/Aura.Cli_Kernel/actions/workflows/continuous-integration.yml/badge.svg?branch=4.x)](https://github.com/auraphp/Aura.Cli_Kernel/actions/workflows/continuous-integration.yml)
+
 
 To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/) to be available as `phpunit`.
 
